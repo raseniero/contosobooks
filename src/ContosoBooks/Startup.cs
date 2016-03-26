@@ -42,18 +42,28 @@ namespace ContosoBooks
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Sql client not available on mono
+            var usingMono = Type.GetType("Mono.Runtime") != null;
+        
+            // Add EF services to the services container
+            if (usingMono)
+            {
+                services.AddEntityFramework()
+                    .AddInMemoryDatabase()
+                    .AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase());
+            } else {
+                services.AddEntityFramework()
+                    .AddSqlServer()
+                    .AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            }
+            
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-
+            
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
+    
             services.AddMvc();
 
             // Add application services.
@@ -89,7 +99,9 @@ namespace ContosoBooks
                              .Database.Migrate();
                     }
                 }
-                catch { }
+                catch 
+                {     
+                }
             }
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
@@ -109,7 +121,7 @@ namespace ContosoBooks
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            SampleData.Initialize(app.ApplicationServices);
+            SampleData.Initialize(app.ApplicationServices, loggerFactory);
         }
 
         // Entry point for the application.

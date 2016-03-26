@@ -4,15 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace ContosoBooks.Models
 {
     public class SampleData
     {
-        public static void Initialize (IServiceProvider serviceProvider)
+        public static void Initialize (IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
         {
+            var logger = loggerFactory.CreateLogger("SampleData");
             var context = serviceProvider.GetService<ApplicationDbContext>();
-            context.Database.Migrate();
+            
+            logger.LogInformation("Context.Database.Type = {0}", context);
+            //TODO: how to check if its using SQL or InMemory //context.Database.Migrate();
+            
             if (!context.Book.Any())
             {
                 var austen = context.Author.Add(new Author { LastName = "Austen", FirstName = "Jane" }).Entity;
