@@ -16,7 +16,8 @@ namespace ContosoBooks.Models
             var context = serviceProvider.GetService<ApplicationDbContext>();
             
             logger.LogInformation("Context.Database.Type = {0}", context);
-            //TODO: how to check if its using SQL or InMemory //context.Database.Migrate();
+            //TODO: how to check if its using SQL or InMemory 
+            context.Database.Migrate();
             
             if (!context.Book.Any())
             {

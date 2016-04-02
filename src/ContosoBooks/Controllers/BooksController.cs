@@ -43,6 +43,7 @@ namespace ContosoBooks.Controllers
         public IActionResult Create()
         {
             ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "AuthorID", "Author");
+
             return View();
         }
 
@@ -57,6 +58,7 @@ namespace ContosoBooks.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "AuthorID", "Author", book.AuthorID);
             return View(book);
         }
@@ -74,7 +76,9 @@ namespace ContosoBooks.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "AuthorID", "Author", book.AuthorID);
+
             return View(book);
         }
 
@@ -89,7 +93,9 @@ namespace ContosoBooks.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "AuthorID", "Author", book.AuthorID);
+
             return View(book);
         }
 
