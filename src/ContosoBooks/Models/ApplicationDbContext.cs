@@ -19,5 +19,6 @@ namespace ContosoBooks.Models
         }
         public DbSet<Book> Book { get; set; }
         public DbSet<Author> Author { get; set; }
+        public DbSet<Movie> Movie { get; set; }
     }
 }

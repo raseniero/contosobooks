@@ -20,6 +20,8 @@ namespace ContosoBooks.Models
             
             if (!context.Book.Any())
             {
+                var starWars = context.Movie.Add(new Movie { Title="Star Wars", ReleaseDate = DateTime.Now, Genre = "Fiction", Price = 1}).Entity;
+                
                 var austen = context.Author.Add(new Author { LastName = "Austen", FirstName = "Jane" }).Entity;
                 var dickens = context.Author.Add(new Author { LastName = "Dickens", FirstName = "Charles" }).Entity;
                 var cervantes = context.Author.Add(new Author { LastName = "Cervantes", FirstName = "Miguel" }).Entity;
