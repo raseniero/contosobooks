@@ -43,3 +43,13 @@ gulp.task("min:css", function () {
 });
 
 gulp.task("min", ["min:js", "min:css"]);
+
+gulp.task("series:first", function() {
+    console.log('my first task! <-------');
+});
+
+gulp.task("series:second", ["series:first"], function () {
+    console.log('my second task! <--------');
+});
+
+gulp.task("series", ["series:first", "series:second"], function () {});
